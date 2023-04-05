@@ -379,7 +379,7 @@ class _SearchPageState extends State<SearchPage> {
                           Text("Username: " + usernameController.text),
                           SizedBox(height: 20),
                           Text(
-                            "Univeristy: " + selectedVarsity!.name!,
+                            "University: " + selectedVarsity!.name!,
                             style: TextStyle(
                               fontSize: 20,
                             ),

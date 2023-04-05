@@ -488,13 +488,17 @@ class _SearchPageState extends State<SearchPage> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: BlocBuilder(
+                              /// widget will be built depending on the BLoC data
                               bloc: searchBloc,
                               builder: (BuildContext context, SearchState state) {
                                 if (state is SearchLoadingState) {
+                                  /// show loading indicator when data is incoming
                                   return Center(child: CircularProgressIndicator());
                                 } else if (state is SearchErrorState) {
+                                  /// show error message
                                   return Text(state.errorMsg, style: TextStyle(color: Colors.red));
                                 } else if (state is SearchCreatedState) {
+                                  /// BLoC has results in this state
                                   if (state.getSearchResultsEntity.results!.isNotEmpty) {
                                     ///if there are results on search, show the results
                                     return ListView.builder(

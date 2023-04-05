@@ -17,10 +17,10 @@ Search doesn't fetch all data from the API at once, thus the user doesn't need t
 
 ## Architecture
 
-- Modified Clean Architecture has been followed thoughout the project.
+- Modified Clean Architecture has been followed throughout the project.
 - BLoc design/architectural pattern, a variation of MVC has been used.
 
-# Instructions
+## Instructions
 
 Flutter sdk supported version: From 2.16.2, less than 3.0.0
 

@@ -17,16 +17,19 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  ///controllers for text editors
   TextEditingController usernameController = TextEditingController();
   TextEditingController varsityController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  //bloc for getting results from api
   SearchBloc searchBloc = SearchBloc();
+
+  SearchResultEntity? selectedVarsity;
+  int searchLength = 0;
 
   bool isPasswordObscure = true;
   bool isAllSubmitted = false;
   bool isSelected = false;
-  SearchResultEntity? selectedVarsity;
-  int searchLength = 0;
   bool showDropDown = false;
 
   //validation
@@ -110,6 +113,7 @@ class _SearchPageState extends State<SearchPage> {
                                 child: Focus(
                                   onFocusChange: (focus) {
                                     setState(() {
+                                      //drop down button opens when focused
                                       showDropDown = focus;
                                     });
                                   },
@@ -119,8 +123,10 @@ class _SearchPageState extends State<SearchPage> {
                                         showDropDown = true;
                                         searchLength = value.length;
                                         if (value.length > 2) {
+                                          //calls api if the query is at least of 3 characters
                                           searchBloc.add(RequestSearchEvent(SearchRequestEntity(value)));
                                         }
+                                        //turns off the results, asks for submission
                                         isSelected = false;
                                         isAllSubmitted = false;
                                       });
@@ -185,6 +191,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
+                                  //asks for resubmission
                                   refreshUsernameInputs();
                                 });
                               },
@@ -241,6 +248,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
+                                  //asks for resubmission
                                   refreshPasswordInputs();
                                 });
                               },
@@ -333,9 +341,12 @@ class _SearchPageState extends State<SearchPage> {
                               FocusScopeNode currentFocus = FocusScope.of(context);
 
                               if (!currentFocus.hasPrimaryFocus) {
+                                //onsubmission, focuses are deleted from textfields
                                 currentFocus.unfocus();
                               }
                               isAllSubmitted = true;
+
+                              //password validation
                               if (passwordController.text.length < 6) isPassword6char = false;
                               RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
 
@@ -346,6 +357,7 @@ class _SearchPageState extends State<SearchPage> {
                                 isPasswordstrong = false;
                               }
 
+                              //username validation
                               if (usernameController.text.length < 4) {
                                 isUsernameSmall = true;
                               }
@@ -371,6 +383,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ],
                     ),
+                    //checking everything after submission
                     if (isAllSubmitted && isSelected && (isPassword6char && isPasswordstrong && !isUsernameSmall))
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

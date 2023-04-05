@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:unisearch_test/features/search/presentation/search_page.dart';
+import 'package:unisearch_test/test_page.dart';
 
 import 'backend.dart';
+import 'features/search/presentation/pages/search_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // body: TestPage(),
       // body: NavigationExample(),
       body: SearchPage(),
     );
@@ -64,7 +66,7 @@ class NavigationExample extends StatelessWidget {
             itemBuilder: (context, Map<String, String> suggestion) {
               return ListTile(
                 title: Text(suggestion['name']!),
-                subtitle: Text('${suggestion['score']}'),
+                subtitle: Text('${suggestion['country']}'),
               );
             },
             onSuggestionSelected: (Map<String, String> suggestion) {

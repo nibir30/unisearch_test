@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../domain/search_result_entity.dart';
+import '../../domain/entities/search_result_entity.dart';
 
 part 'search_result_model.g.dart';
 

@@ -72,9 +72,6 @@ class Suggestion {
 // //   "domains": ["hunnu.edu.cn"]
 // // };
 
-// import 'dart:async';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert' as convert;
 
 // class BackendService {
 //   static Future<List<Map<String, String>>> getSuggestions(String query) async {

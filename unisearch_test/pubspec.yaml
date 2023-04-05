@@ -15,15 +15,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   json_annotation: ^4.0.1
   json_serializable: ^4.1.1
+
   provider: ^6.0.5
   flutter_bloc: ^7.3.3
   get_it: ^7.2.0
   dio: ^4.0.4
   http: ^0.13.4
-  rxdart: ^0.27.3
   flutter_easyloading: ^3.0.5
-  dartz: ^0.10.1
-  intl: ^0.17.0
 
   fluttertoast: ^8.0.8
   flutter_typeahead: ^3.1.3

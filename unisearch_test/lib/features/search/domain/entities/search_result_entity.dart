@@ -1,4 +1,4 @@
-import '../data/search_result_model.dart';
+import '../../data/models/search_result_model.dart';
 
 class SearchResultEntity {
   String? state_province;

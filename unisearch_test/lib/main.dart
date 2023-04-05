@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:unisearch_test/test_page.dart';
 
-import 'backend.dart';
 import 'features/search/presentation/pages/search_page.dart';
 
 void main() {
@@ -15,11 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'UniSearch',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'UniSearch Home Page'),
     );
   }
 }
@@ -40,41 +37,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // body: TestPage(),
       // body: NavigationExample(),
       body: SearchPage(),
-    );
-  }
-}
-
-class NavigationExample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(32.0),
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 10.0,
-          ),
-          TypeAheadField(
-            textFieldConfiguration: TextFieldConfiguration(
-              autofocus: true,
-              style: DefaultTextStyle.of(context).style.copyWith(fontStyle: FontStyle.italic),
-              decoration: InputDecoration(border: OutlineInputBorder(), hintText: 'What is on your mind?'),
-            ),
-            suggestionsCallback: (pattern) async {
-              return await BackendService.getSuggestions(pattern);
-            },
-            itemBuilder: (context, Map<String, String> suggestion) {
-              return ListTile(
-                title: Text(suggestion['name']!),
-                subtitle: Text('${suggestion['country']}'),
-              );
-            },
-            onSuggestionSelected: (Map<String, String> suggestion) {
-              // your implementation here
-            },
-          ),
-        ],
-      ),
     );
   }
 }

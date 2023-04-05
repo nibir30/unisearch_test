@@ -4,7 +4,10 @@ A project containing a Search Screen, Buttons, Textfields and Widgets with attra
 
 ## Overview
 
-The objective of this project is to fetch data, search and autocomplete text from the search from a public API which provides a huge amount of data.
+Flutter sdk supported version: From 2.16.2, less than 3.0.0
+If modified any model, run on terminal "flutter packages pub run build_runner build --delete-conflicting-outputs" at directory "uniSearch_Test\unisearch_test"
+
+The objective of this project is to fetch data, search and autocomplete text from the search-query from a public API which provides a huge amount of data.
 
 ## Features
 
@@ -13,7 +16,7 @@ The objective of this project is to fetch data, search and autocomplete text fro
 - Realtime search implementation that provides suggestion on DropDownList according to the search
 - Show the result by fetching additional data
 
-Search doesn't include fetching all data from the API, rather than it uses additional query based on what you type and brings back suggestions on realtime.
+Search doesn't fetch all data from the API at once, thus the user doesn't need to wait, rather it uses additional query based on what the user types and brings back suggestions on realtime.
 
 ## Architecture
 

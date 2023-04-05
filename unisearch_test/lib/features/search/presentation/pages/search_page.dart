@@ -17,36 +17,41 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  ///controllers for text editors
+  /// controllers for text editors
   TextEditingController usernameController = TextEditingController();
   TextEditingController varsityController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  //bloc for getting results from api
+
+  /// bloc for getting results from api
   SearchBloc searchBloc = SearchBloc();
 
   SearchResultEntity? selectedVarsity;
+
+  /// search wont work for queries with search length of 2 or less
   int searchLength = 0;
 
+  /// to keep password obscured
   bool isPasswordObscure = true;
-  bool isAllSubmitted = false;
-  bool isSelected = false;
+
+  /// to keep track if the submit button pressed or not
+  bool isSubmitted = false;
+
+  /// to keep stop showing results when inputs are changed
+  bool showResults = false;
+
+  /// to keep track if any varsity is selected or not
+  bool isVarsitySelected = false;
+
+  /// to show drop down widget on search
   bool showDropDown = false;
 
-  //validation
+  /// for validation purposes
   bool isPassword6char = true;
   bool isPasswordstrong = true;
   bool isUsernameSmall = false;
 
-  void refreshUsernameInputs() {
-    isAllSubmitted = false;
-    isUsernameSmall = false;
-  }
-
-  void refreshPasswordInputs() {
-    isAllSubmitted = false;
-    isPassword6char = true;
-    isPasswordstrong = true;
-  }
+  //password validation checker
+  RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
 
   _SearchPageState();
 
@@ -57,7 +62,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    /// to check and unfocus of every textfield
     FocusScopeNode currentFocus = FocusScope.of(context);
+
+    /// device size
     final size = MediaQuery.of(context).size;
 
     return SafeArea(
@@ -110,25 +118,30 @@ class _SearchPageState extends State<SearchPage> {
                             padding: const EdgeInsets.only(right: 10.0),
                             child: Center(
                               child: FocusScope(
+                                /// focus to open and close the drop down efficiently
                                 child: Focus(
                                   onFocusChange: (focus) {
                                     setState(() {
-                                      //drop down button opens when focused
+                                      /// drop down button opens when focused
                                       showDropDown = focus;
                                     });
                                   },
                                   child: TextField(
                                     onChanged: (value) {
                                       setState(() {
+                                        showResults = false;
                                         showDropDown = true;
                                         searchLength = value.length;
                                         if (value.length > 2) {
-                                          //calls api if the query is at least of 3 characters
+                                          /// calls api if the query is at least of 3 characters
+                                          /// requesting data for query
                                           searchBloc.add(RequestSearchEvent(SearchRequestEntity(value)));
                                         }
-                                        //turns off the results, asks for submission
-                                        isSelected = false;
-                                        isAllSubmitted = false;
+
+                                        /// turns off the results, asks for submission
+                                        isVarsitySelected = false;
+                                        isSubmitted = false;
+                                        showResults = false;
                                       });
                                     },
                                     controller: varsityController,
@@ -142,7 +155,9 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                         ),
-                        if (!isSelected && isAllSubmitted)
+
+                        /// if submitted without selecting any varsity, this warning will show up
+                        if (!isVarsitySelected && isSubmitted)
                           Column(
                             children: [
                               SizedBox(height: 5),
@@ -191,8 +206,15 @@ class _SearchPageState extends State<SearchPage> {
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
-                                  //asks for resubmission
-                                  refreshUsernameInputs();
+                                  /// checks validation
+                                  if (value.length < 4) {
+                                    isUsernameSmall = true;
+                                  } else {
+                                    isUsernameSmall = false;
+                                  }
+
+                                  /// hides result
+                                  showResults = false;
                                 });
                               },
                               controller: usernameController,
@@ -203,6 +225,8 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                         ),
+
+                        /// if submitted with a username length of less than 4, this warning will show up
                         if (isUsernameSmall)
                           Column(
                             children: [
@@ -248,8 +272,22 @@ class _SearchPageState extends State<SearchPage> {
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
-                                  //asks for resubmission
-                                  refreshPasswordInputs();
+                                  //checks validation
+                                  if (value.length < 6) {
+                                    isPassword6char = false;
+                                  } else {
+                                    isPassword6char = true;
+                                  }
+
+                                  String _password = value.trim();
+                                  if (pass_valid.hasMatch(_password)) {
+                                    isPasswordstrong = true;
+                                  } else {
+                                    isPasswordstrong = false;
+                                  }
+
+                                  /// hides result
+                                  showResults = false;
                                 });
                               },
                               controller: passwordController,
@@ -262,6 +300,7 @@ class _SearchPageState extends State<SearchPage> {
                                           onTap: () {
                                             setState(
                                               () {
+                                                /// password is showed upon clicking the button
                                                 isPasswordObscure = !isPasswordObscure;
                                               },
                                             );
@@ -279,6 +318,7 @@ class _SearchPageState extends State<SearchPage> {
                                           onTap: () {
                                             setState(
                                               () {
+                                                /// password is hidden upon clicking the button
                                                 isPasswordObscure = !isPasswordObscure;
                                               },
                                             );
@@ -297,6 +337,8 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                           ),
                         ),
+
+                        /// if submitted with a weak password this warning will show up
                         if (!isPasswordstrong)
                           Column(
                             children: [
@@ -313,6 +355,8 @@ class _SearchPageState extends State<SearchPage> {
                               ),
                             ],
                           ),
+
+                        /// if submitted with a small password this warning will show up
                         if (!isPassword6char)
                           Column(
                             children: [
@@ -341,13 +385,20 @@ class _SearchPageState extends State<SearchPage> {
                               FocusScopeNode currentFocus = FocusScope.of(context);
 
                               if (!currentFocus.hasPrimaryFocus) {
-                                //onsubmission, focuses are deleted from textfields
+                                //onsubmission, focuses are removed from textfields
                                 currentFocus.unfocus();
                               }
-                              isAllSubmitted = true;
 
-                              //password validation
-                              if (passwordController.text.length < 6) isPassword6char = false;
+                              /// submit clicked, results will be shown if validation stands on password and username
+                              isSubmitted = true;
+                              showResults = true;
+
+                              /// password validation recheck on submission
+                              if (passwordController.text.length < 6) {
+                                isPassword6char = false;
+                              } else {
+                                isPassword6char = true;
+                              }
                               RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
 
                               String _password = passwordController.text.trim();
@@ -357,9 +408,11 @@ class _SearchPageState extends State<SearchPage> {
                                 isPasswordstrong = false;
                               }
 
-                              //username validation
+                              /// username validation recheck on submission
                               if (usernameController.text.length < 4) {
                                 isUsernameSmall = true;
+                              } else {
+                                isUsernameSmall = false;
                               }
                             });
                           },
@@ -384,7 +437,7 @@ class _SearchPageState extends State<SearchPage> {
                       ],
                     ),
                     //checking everything after submission
-                    if (isAllSubmitted && isSelected && (isPassword6char && isPasswordstrong && !isUsernameSmall))
+                    if (isVarsitySelected && showResults && (isPassword6char && isPasswordstrong && !isUsernameSmall))
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -414,12 +467,16 @@ class _SearchPageState extends State<SearchPage> {
                   ],
                 ),
               ),
+
+              /// the DropDownWidget call
               if (showDropDown)
                 Positioned(
                   top: 204,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: (!isSelected && searchLength > 2)
+
+                    /// if varsity is not selected already, show dropdown results of search
+                    child: (!isVarsitySelected && searchLength > 2)
                         ? Container(
                             constraints: BoxConstraints(
                               minHeight: 40,
@@ -439,6 +496,7 @@ class _SearchPageState extends State<SearchPage> {
                                   return Text(state.errorMsg, style: TextStyle(color: Colors.red));
                                 } else if (state is SearchCreatedState) {
                                   if (state.getSearchResultsEntity.results!.isNotEmpty) {
+                                    ///if there are results on search, show the results
                                     return ListView.builder(
                                       physics: BouncingScrollPhysics(),
                                       itemCount: state.getSearchResultsEntity.results!.length,
@@ -451,9 +509,14 @@ class _SearchPageState extends State<SearchPage> {
                                               currentFocus.unfocus();
                                             }
                                             setState(() {
+                                              /// upon university selection, close dropdown
                                               showDropDown = false;
-                                              isSelected = true;
+                                              isVarsitySelected = true;
+
+                                              /// save the selected varstiy
                                               selectedVarsity = singleResult;
+
+                                              /// show the university name on textfield
                                               varsityController.text = singleResult.name!;
                                             });
                                           },
@@ -465,6 +528,7 @@ class _SearchPageState extends State<SearchPage> {
                                       },
                                     );
                                   } else {
+                                    /// for invalid searches, there is no result, show warning
                                     return Container(
                                       padding: EdgeInsets.all(10),
                                       constraints: BoxConstraints(
@@ -479,13 +543,20 @@ class _SearchPageState extends State<SearchPage> {
                                     );
                                   }
                                 }
+
+                                /// must return a widget in this builder
                                 return Container();
                               },
                             ),
                           )
-                        : isSelected
+
+                        /// if search query is smaller than 3 characters and the varsity is already selected, show nothing
+                        : isVarsitySelected
                             ? Container()
-                            : Container(
+                            :
+
+                            /// if the varsity is not selected yet, and search query is smaller than 3 characters
+                            Container(
                                 padding: EdgeInsets.all(10),
                                 constraints: BoxConstraints(
                                   minHeight: 40,

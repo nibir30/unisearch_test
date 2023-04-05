@@ -1,16 +1,21 @@
-# unisearch_test
+# UniSearch
 
-A new Flutter project.
+A project containing a Search Screen, Buttons, Textfields and Widgets with attractive UI, built with Flutter.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
+The objective of this project is to fetch data, search and autocomplete text from the search from a public API which provides a huge amount of data.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Validation check for username and password inputs
+- Validation check for search for university names
+- Realtime search implementation that provides suggestion on DropDownList according to the search
+- Show the result by fetching additional data
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Search doesn't include fetching all data from the API, rather than it uses additional query based on what you type and brings back suggestions on realtime.
+
+## Architecture
+
+- Modified Clean Architecture has been followed thoughout the project.
+- BLoc design/architectural pattern, a variation of MVC has been used.

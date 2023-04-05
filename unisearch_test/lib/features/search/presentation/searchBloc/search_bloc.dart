@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:unisearch_test/api_gateway/repositories/search_repository/search_repository.dart';
-import 'package:unisearch_test/features/search/domain/entities/search_result_entity.dart';
 import 'package:unisearch_test/features/search/domain/usecase/search_usecase.dart';
 import '../../domain/entities/get_search_results_entity.dart';
 import '../../domain/entities/search_request_entity.dart';

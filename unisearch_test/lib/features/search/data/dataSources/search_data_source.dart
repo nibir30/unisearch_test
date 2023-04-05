@@ -17,14 +17,22 @@ class SearchDataSourceImpl implements SearchDataSource {
 
   @override
   Future<GetSearchResultsModel?> getSearchData(SearchRequestEntity profileRequestDataEntity) async {
+    /// url input
     String url = 'http://universities.hipolabs.com/search';
     if (profileRequestDataEntity.varsityName != null) {
+      /// adding query by University name
       url = 'http://universities.hipolabs.com/search?name=' + profileRequestDataEntity.varsityName.toString();
     } else {
       url = 'http://universities.hipolabs.com/search';
     }
+
+    /// http request
     final response = await http.get(Uri.parse(url));
+
+    /// json data to List of Maps conversion
     final List<Map<String, dynamic>> body = List<Map<String, dynamic>>.from(json.decode(response.body));
+
+    /// map to model conversion
     GetSearchResultsModel _response = _getSearchDataApi.listMapResponse(body);
     return _response;
   }

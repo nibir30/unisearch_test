@@ -19,10 +19,5 @@ class SearchCreatedState extends SearchState {
     this.getSearchResultsEntity,
   );
 }
-// class SearchVerifiedState extends SearchState {
-//   final SearchVerificationResponseEntity SearchVerificationResponseEntity;
-
-//   SearchVerifiedState(this.SearchVerificationResponseEntity);
-// }
 
 class SearchSuccessState extends SearchState {}

@@ -15,8 +15,9 @@ class SearchRepositoryImpl implements SearchRepository {
   @override
   Future<GetSearchResultsEntity?> getSearchData(SearchRequestEntity searchRequestEntity) async {
     final GetSearchResultsModel? _response = await _searchDataSource.getSearchData(searchRequestEntity);
-    GetSearchResultsEntity? _searchEntity;
-    _searchEntity = _response!.toEntity();
+
+    /// converting models to entities
+    GetSearchResultsEntity? _searchEntity = _response!.toEntity();
     return _searchEntity;
   }
 }

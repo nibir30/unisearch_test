@@ -7,9 +7,11 @@ class SearchApi {
     List<SearchResultModel> list = [];
 
     for (var i = 0; i < responseJson!.length; i++) {
+      /// converting json data to model
       final SearchResultModel _singleResult = SearchResultModel.fromJson(responseJson[i]);
       list.add(_singleResult);
     }
+
     GetSearchResultsModel _response = GetSearchResultsModel(list);
 
     return _response;

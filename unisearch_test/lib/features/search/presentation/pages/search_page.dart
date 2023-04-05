@@ -49,6 +49,7 @@ class _SearchPageState extends State<SearchPage> {
   bool isPassword6char = true;
   bool isPasswordstrong = true;
   bool isUsernameSmall = false;
+  bool isUsernameValid = true;
 
   //password validation checker
   RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
@@ -129,8 +130,10 @@ class _SearchPageState extends State<SearchPage> {
                                   child: TextField(
                                     onChanged: (value) {
                                       setState(() {
+                                        /// open the dropdown suggestion list
                                         showResults = false;
                                         showDropDown = true;
+
                                         searchLength = value.length;
                                         if (value.length > 2) {
                                           /// calls api if the query is at least of 3 characters
@@ -212,6 +215,16 @@ class _SearchPageState extends State<SearchPage> {
                                   } else {
                                     isUsernameSmall = false;
                                   }
+                                  final validCharacters = RegExp(r'^[a-z0-9]+$');
+                                  final invalidFirstLetter = RegExp(r'^[0-9]+$');
+
+                                  /// checking if username contains Capital, specail letters.
+                                  /// Or a digit at the start
+                                  if (!validCharacters.hasMatch(value) || value.startsWith(invalidFirstLetter)) {
+                                    isUsernameValid = false;
+                                  } else {
+                                    isUsernameValid = true;
+                                  }
 
                                   /// hides result
                                   showResults = false;
@@ -235,6 +248,22 @@ class _SearchPageState extends State<SearchPage> {
                                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   "•	Username must contain at least 4 characters",
+                                  style: TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        if (!isUsernameValid)
+                          Column(
+                            children: [
+                              SizedBox(height: 5),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  "•	Username can contain only small letters and numbers",
                                   style: TextStyle(
                                     color: Colors.redAccent,
                                     fontSize: 12,
@@ -414,6 +443,16 @@ class _SearchPageState extends State<SearchPage> {
                               } else {
                                 isUsernameSmall = false;
                               }
+
+                              /// checking if username contains Capital, specail letters.
+                              /// Or a digit at the start
+                              final validCharacters = RegExp(r'^[a-z0-9]+$');
+                              final invalidFirstLetter = RegExp(r'^[0-9]+$');
+                              if (!validCharacters.hasMatch(usernameController.text) || usernameController.text.startsWith(invalidFirstLetter)) {
+                                isUsernameValid = false;
+                              } else {
+                                isUsernameValid = true;
+                              }
                             });
                           },
                           child: Container(
@@ -437,7 +476,7 @@ class _SearchPageState extends State<SearchPage> {
                       ],
                     ),
                     //checking everything after submission
-                    if (isVarsitySelected && showResults && (isPassword6char && isPasswordstrong && !isUsernameSmall))
+                    if (isVarsitySelected && showResults && (isPassword6char && isPasswordstrong && !isUsernameSmall && isUsernameValid))
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
